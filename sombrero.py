@@ -9,15 +9,16 @@ restart programs if they crash and can be used to switch daemons on and off usin
 import re
 import shlex
 import subprocess
-import StringIO
+from StringIO import StringIO
 import time
 
 import envoy
 
+# Daemon manager scan time in seconds
 daemon_master_frequency = 300
 
+# Endpoint for output of daemon processes
 nohup_endpoint = '> /dev/null 2>&1 &'
-
 
 # Create a dictionary of all daemon names and associated commands here
 daemon_dict = {'example_daemon_1': 'nohup python ./example/example_daemon_1.py',
@@ -62,7 +63,7 @@ def get_daemon_pids():
     '''
     daemon_processes = get_daemons()
     daemon_pid_dict = {}
-    for process_string in StringIO.StringIO(daemon_processes):
+    for process_string in StringIO(daemon_processes):
         for name, command in daemon_dict.items():
             if command in process_string:
                 daemon_pid_dict[name] = get_pid_from_process_string(process_string)
@@ -82,8 +83,7 @@ def stop_daemon(daemon_name):
         return
     target_daemon_pid = status
     print('Killing {} with pid {}'.format(daemon_name, target_daemon_pid))
-    r = envoy.run('sudo kill {}'.format(target_daemon_pid))
-    print(r.std_out)
+    print(envoy.run('sudo kill {}'.format(target_daemon_pid)).std_out)
 
 def status_daemon(daemon_name):
     '''
