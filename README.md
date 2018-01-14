@@ -12,3 +12,6 @@ Once setup, simply run the sombrero as another nohup daemon. e.g.
 ## Tips
 - If needed you can set multiple nohup endpoints to separate the logs from different processes.
 - You can import the `restart_daemon` function in other modules to force processes restart based on other events.
+
+## TODO
+- Remove dependency on StringIO library to make sombrero python 2/3 compatible
